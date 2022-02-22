@@ -1,3 +1,13 @@
+<?php
+require 'config/config.php';
+session_start();
+
+if(empty($_SESSION['user_id']) && empty($SESSION['logged_in'])){
+  header("Location: login.php");
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,128 +34,45 @@
             <h1 style="text-align:center">Blog Site</h1>
       </div><!-- /.container-fluid -->
     </section>
+    <?php
+    $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    ?>
 
     <!-- Main content -->
     <section class="content">
       <div class="row">
-        <div class="col-md-4">
-          <!-- Box Comment -->
-          <div class="card card-widget">
-            <div class="card-header">
-                <div style = "text-align:center !important;float:none" class="card-title">
-                  <h4>Blog Title</h4>
-                </div>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
+        <?php
+          if($result){
+            $i = 1;
+            foreach ($result as $value){
+        ?>
+          <div class="col-md-4">
 
-              <p></p>
+            <!-- Box Comment -->
+            <div class="card card-widget">
+              <div class="card-header">
+                  <div style = "text-align:center !important;float:none" class="card-title">
+                    <h4><?php echo $value['title'] ?></h4>
+                  </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <a href="blogdetail.php?id=<?php echo $value['id']; ?>"><img class="img-fluid pad" src="admin/images/<?php echo $value['image'] ?>"  style = "height: 200px !important;"> </a>
+              </div>
+              <!-- /.card-body -->
             </div>
-            <!-- /.card-body -->
+            <!-- /.card -->
           </div>
-          <!-- /.card -->
-        </div>
-
-        <div class="col-md-4">
-          <!-- Box Comment -->
-          <div class="card card-widget">
-            <div class="card-header">
-                <div style = "text-align:center !important;float:none" class="card-title">
-                  <h4>Blog Title</h4>
-                </div>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-              <p></p>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </div>
-
-        <div class="col-md-4">
-          <!-- Box Comment -->
-          <div class="card card-widget">
-            <div class="card-header">
-                <div style = "text-align:center !important;float:none" class="card-title">
-                  <h4>Blog Title</h4>
-                </div>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-              <p></p>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </div>
+        <?php
+          $i++;
+            }
+          }
+        ?>
         <!-- /.col -->
       </div>
 
-      <div class="row">
-        <div class="col-md-4">
-          <!-- Box Comment -->
-          <div class="card card-widget">
-            <div class="card-header">
-                <div style = "text-align:center !important;float:none" class="card-title">
-                  <h4>Blog Title</h4>
-                </div>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-              <p></p>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </div>
-
-        <div class="col-md-4">
-          <!-- Box Comment -->
-          <div class="card card-widget">
-            <div class="card-header">
-                <div style = "text-align:center !important;float:none" class="card-title">
-                  <h4>Blog Title</h4>
-                </div>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-              <p></p>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </div>
-
-        <div class="col-md-4">
-          <!-- Box Comment -->
-          <div class="card card-widget">
-            <div class="card-header">
-                <div style = "text-align:center !important;float:none" class="card-title">
-                  <h4>Blog Title</h4>
-                </div>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-              <p></p>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </div>
-        <!-- /.col -->
-      </div>
     </section>
     <!-- /.content -->
 
@@ -154,13 +81,17 @@
     </a>
   </div>
   <!-- /.content-wrapper -->
-
-  <footer class="main-footer" style = "margin-left:0px !important">
-    <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.1.0
+  <!-- Main Footer -->
+  <footer class="main-footer" style="margin-left:0px !important;">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline">
+      <a href="logout.php" type = "button" class = "btn btn-default">Log Out</a>
     </div>
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2022 <a href="#">Kyaw Wunna</a>.</strong> All rights reserved.
   </footer>
+  </div>
+  <!-- ./wrapper -->
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
